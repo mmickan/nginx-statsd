@@ -275,10 +275,12 @@ ngx_http_statsd_handler(ngx_http_request_t *r)
 		n = ngx_http_statsd_metric_get_value(r, stat.cmetric, stat.metric);
 		b = ngx_http_statsd_valid_get_value(r, stat.cvalid, stat.valid);
 
-		if (b == 0 || s.len == 0 || n <= 0) {
-			// Do not log if not valid, key is invalid, or valud is lte 0.
+		if (b > 0 && s.len > 0) {
+			// Log zero value if condition is true
+		} else if (b == 0 || s.len == 0 || n <= 0) {
+			// Do not log if not valid, key is invalid, or value is lte 0.
 			ngx_log_debug0(NGX_LOG_DEBUG_HTTP, r->connection->log, 0, "statsd: no value to send");
-         	continue;
+         		continue;
 		};
 
 		if (stat.type == STATSD_TYPE_COUNTER) {

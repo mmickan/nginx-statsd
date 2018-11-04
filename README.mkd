@@ -35,6 +35,10 @@ This is how to use the nginx-statsd module:
 				# it will not be sent. Thus, there is no need to add a test.
 				statsd_timing "your_product.pages.index_response_time" "$upstream_response_time";
 
+				# Send a timing to "your_product.pages.index_response_time" equal to
+				# the request time. Don't omit 0 timings.
+				statsd_timing "your_product.pages.index_response_time" "$request_time" 1;
+
 				# Increment a key based on the value of a custom header. Only sends the value if
 				# the custom header exists in the upstream response.
 				statsd_count "your_product.custom_$upstream_http_x_some_custom_header" 1 
